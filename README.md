@@ -21,4 +21,4 @@ To run this software on real hardware, use a Pico Omnibus or similar device to s
 
 ## License
 
-This project uses the GNU GPLv3.
+This project uses the GNU GPLv3.# Picograph
