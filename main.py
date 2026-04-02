@@ -1,5 +1,5 @@
 import sys
-emulated = sys.implementation.name = "cpython"
+emulated = sys.implementation.name == "cpython"
 
 if emulated:
     from software_display import SoftwareDisplay
