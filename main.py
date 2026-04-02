@@ -6,6 +6,7 @@ if emulated:
 else:
     from hardware_display import HardwareDisplay
     from keypad import Keypad
+    from machine import Pin
 from cas import Polynomial, ExprSyntaxError, MissingVariableValueError
 from utils import *
 
@@ -26,9 +27,13 @@ def graph(polynomial: cas.Polynomial, graph_range: float, display: Display) -> N
     x_coords = [graph_range * (2 * j / display_size - 1) for j in range(display_size)]
     prev_row_vals = [0] * display_size
 
+    led = None if emulated else Pin("LED", Pin.OUT)
+
     for i in range(display_size):
         y = graph_range * (1 - 2 * i / display_size)
         current_row_vals = [polynomial.substitute(x=x, y=y) for x in x_coords]
+
+        if not emulated: led.toggle()
 
         for j in range(display_size):
             current_sign = sign(current_row_vals[j])
@@ -48,6 +53,7 @@ def graph(polynomial: cas.Polynomial, graph_range: float, display: Display) -> N
 
         prev_row_vals = current_row_vals
         
+    led.on()
     display.write(1, 2, str(polynomial) + "=0")
 
 class Calculator:
@@ -60,6 +66,9 @@ class Calculator:
 
         self.pretty_print_expr()
         self.display.refresh()
+
+        if not emulated:
+            Pin("LED", Pin.OUT).on()
 
     def run(self) -> None:
         self.display.mainloop(lambda key, _: self.keypress(key))
