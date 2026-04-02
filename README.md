@@ -11,7 +11,7 @@ You input expressions via a hex keypad, which are interpreted as bivariate impli
 - `*`: Backspace
 - `#`: *= 0*; toggles between editing and viewing mode.
 
-For exponentiation, repeatedly hit the same variable key (e.g., `AAA` → *x³*).
+For exponentiation, repeatedly hit the same variable key (e.g., `AAA` → *x³*). For a decimal point, double press `C`.
 
 In viewing mode, use `C` & `D` to zoom in and out.
 
