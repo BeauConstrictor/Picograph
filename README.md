@@ -25,6 +25,10 @@ These approximations are implemented as [Taylor series](https://en.wikipedia.org
 
 You can also enter a simple calculation mode by pressing A when on the catalogue screen. Here, the buttons `A` & `B` are serve as multiplcation and division, respectively. Every other button has the same function as in the normal.
 
+To multiplication signs in a row actually performs exponentiation.
+
+To exit this mode, double press `D`. 
+
 ## Implementation
 
 To run on hardware:
