@@ -154,6 +154,7 @@ class Calculator:
         self.display.clear()
         self.display.write(1, 2, "CATALOGUE")
         self.display.write(1, 9, "(of premade functions)")
+        self.display.write(1, 128-7-1, "Press A for calculator mode")
 
         for i, (name, expr) in enumerate(CATALOGUE.items()):
             self.display.write(1, 23+i*7, "  " + name)
@@ -166,11 +167,56 @@ class Calculator:
             self.expr = choice[1]
             self.mode = "graphing"
             self.graph()
+        elif key == "*":
+            self.mode = "typing"
+            self.expr = self.expr[:-1] # remove trailling '-'
+            self.display.clear()
+            self.pretty_print_expr()
+        elif key == "A":
+            self.mode = "calculate"
+            self.display.clear()
+            self.expr = ""
+            self.display.write(1, 2, "_")
+    
+    def calculate_keypress(self, key: str) -> None:
+        expr_ends_in_dash = len(self.expr) > 0 and self.expr[-1] == "-"
+
+        if key == "*":
+            self.expr = self.expr[:-1]
+        elif key.isdigit():
+            self.expr += key
+        elif key == "A":
+            self.expr += "*"
+        elif key == "B":
+            self.expr += "/"
+        elif key == "C" and len(self.expr) > 0 and self.expr[-1] == "+":
+            self.expr = self.expr[:-1] + "."
+        elif key == "C":
+            self.expr += "+"
+        elif key == "D" and not expr_ends_in_dash:
+            self.expr += "-"
+
+        self.display.clear()
+        self.display.write(1, 2, self.expr + "_")
+    
+        if key == "#":
+            try:
+                result = str(eval(self.expr))
+            except BaseException as e:
+                result = e.__name__
+            self.display.clear()
+            self.display.write(1, 2, self.expr)
+            self.display.write(1, 128-7-1, "=" + result)
+        elif key == "D" and expr_ends_in_dash:
+            self.catalogue_selection = 0
+            self.mode = "catalogue"
+            self.keypress("C")
 
     def keypress(self, key: str) -> None:
         if   self.mode == "typing":    self.typing_keypress(key)
         elif self.mode == "graphing":  self.graphing_keypress(key)
         elif self.mode == "catalogue": self.catalogue_keypress(key)
+        elif self.mode == "calculate": self.calculate_keypress(key)
 
 if __name__ == "__main__":
     if emulated:

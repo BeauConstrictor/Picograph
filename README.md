@@ -21,6 +21,10 @@ The catalogue features some pre-written functions that you can graph right away.
 
 These approximations are implemented as [Taylor series](https://en.wikipedia.org/wiki/Taylor_series). These expressions are quite slow to evaluate on real hardware, so the zoom is automatically set to get you the best view of the function - zooming out too far will reveal the 'limitations' of the approximation.
 
+## Calculator Mode
+
+You can also enter a simple calculation mode by pressing A when on the catalogue screen. Here, the buttons `A` & `B` are serve as multiplcation and division, respectively. Every other button has the same function as in the normal.
+
 ## Implementation
 
 To run on hardware:
