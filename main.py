@@ -17,7 +17,7 @@ from utils import *
 with open("catalogue.json", "r") as f:
     catalogue = json.load(f)
 
-def graph(polynomial: cas.Polynomial, graph_range: float, display: Display) -> None:
+def graph(polynomial: cas.Polynomial, graph_range: float, display: "Display") -> None:
     display_size = 128
     x_offset = 16
     y_offset = 0
@@ -74,7 +74,7 @@ class Calculator:
         self.display = display
 
         self.zoom = 1.2
-        self.mode = "typing" # or "graphing"
+        self.mode = "typing" # or "graphing", "catalogue" or "calculate"
         self.catalogue_selection = 0
 
         self.pretty_print_expr()
@@ -98,7 +98,7 @@ class Calculator:
         polynomial = Polynomial(self.expr)
         self.display.write(1, 2, str(polynomial) + "_")
 
-    def typing_keypress(self, key: str) -> None:
+    def type_key(self, key: str, a: str, b: str) -> None:
         expr_ends_in_dash = len(self.expr) > 0 and self.expr[-1] == "-"
 
         if key == "*":
@@ -106,9 +106,9 @@ class Calculator:
         elif key.isdigit():
             self.expr += key
         elif key == "A":
-            self.expr += "x"
+            self.expr += a
         elif key == "B":
-            self.expr += "y"
+            self.expr += b
         elif key == "C" and len(self.expr) > 0 and self.expr[-1] == "+":
             self.expr = self.expr[:-1] + "."
         elif key == "C":
@@ -116,9 +116,13 @@ class Calculator:
         elif key == "D" and not expr_ends_in_dash:
             self.expr += "-"
 
+    def typing_keypress(self, key: str) -> None:
+        self.type_key(key, a="x", b="y")
+
         self.display.clear()
         self.pretty_print_expr()
     
+        expr_ends_in_dash = len(self.expr) > 0 and self.expr[-1] == "-"
         if key == "#":
             try:
                 self.zoom = 1.2
@@ -181,28 +185,18 @@ class Calculator:
             self.display.write(1, 2, "_")
     
     def calculate_keypress(self, key: str) -> None:
-        expr_ends_in_dash = len(self.expr) > 0 and self.expr[-1] == "-"
-
-        if key == "*":
-            self.expr = self.expr[:-1]
-        elif key.isdigit():
-            self.expr += key
-        elif key == "A":
-            self.expr += "*"
-        elif key == "B":
-            self.expr += "/"
-        elif key == "C" and len(self.expr) > 0 and self.expr[-1] == "+":
-            self.expr = self.expr[:-1] + "."
-        elif key == "C":
-            self.expr += "+"
-        elif key == "D" and not expr_ends_in_dash:
-            self.expr += "-"
+        self.type_key(key, a="*", b="/")
 
         self.display.clear()
         self.display.write(1, 2, self.expr + "_")
     
+        expr_ends_in_dash = len(self.expr) > 0 and self.expr[-1] == "-"
         if key == "#":
             try:
+                # this is safe because the string can only contains
+                # chars that can be typed by the keypad. and besides,
+                # your only gonna be able to hack yourself, there's
+                # no trust boundary here.
                 result = str(eval(self.expr))
             except BaseException as e:
                 result = e.__name__

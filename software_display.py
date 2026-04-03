@@ -6,8 +6,8 @@ from font import font
 NORMALSCRIPT = str.maketrans("⁰¹²³⁴⁵⁶⁷⁸⁹",
                              "0123456789")
 
-EASY_KEYS = str.maketrans("0123456789XY+-=\r\b",
-                          "0123456789ABCD##*")
+EASY_KEYS = str.maketrans("0123456789XY+-=*/\r\b",
+                          "0123456789ABCD#AB#*")
 
 COLS = {
     "red":   (255, 0, 0),
@@ -94,10 +94,15 @@ class SoftwareDisplay:
                 elif event.type == pygame.KEYUP:
                     key = event.unicode.upper()
                     key = key.translate(EASY_KEYS)
+                    if event.key == pygame.K_UP:   key = "C"
+                    if event.key == pygame.K_DOWN: key = "D"
                     
                     if key == ".":
                         keypress("C", self)
                         keypress("C", self)
+                    if event.key == pygame.K_ESCAPE:
+                        keypress("D", self)
+                        keypress("D", self)
 
                     if key not in "1234567890ABCD#*": continue
                     keypress(key, self)
