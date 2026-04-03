@@ -117,12 +117,13 @@ class Calculator:
             self.expr += "-"
 
     def typing_keypress(self, key: str) -> None:
+        expr_ends_in_dash = len(self.expr) > 0 and self.expr[-1] == "-"
+
         self.type_key(key, a="x", b="y")
 
         self.display.clear()
         self.pretty_print_expr()
     
-        expr_ends_in_dash = len(self.expr) > 0 and self.expr[-1] == "-"
         if key == "#":
             try:
                 self.zoom = 1.2
@@ -165,7 +166,7 @@ class Calculator:
         for i, (name, expr) in enumerate(catalogue.items()):
             self.display.write(1, 23+i*7, "  " + name)
             if i == self.catalogue_selection:
-                self.display.write(1, 23+i*7, ">")
+                self.display.write(1, 23+i*7, "y>")
 
         if key == "#":
             choice = list(catalogue.values())[self.catalogue_selection]
@@ -185,12 +186,13 @@ class Calculator:
             self.display.write(1, 2, "_")
     
     def calculate_keypress(self, key: str) -> None:
+        expr_ends_in_dash = len(self.expr) > 0 and self.expr[-1] == "-"
+
         self.type_key(key, a="*", b="/")
 
         self.display.clear()
         self.display.write(1, 2, self.expr + "_")
-    
-        expr_ends_in_dash = len(self.expr) > 0 and self.expr[-1] == "-"
+
         if key == "#":
             try:
                 # this is safe because the string can only contains
