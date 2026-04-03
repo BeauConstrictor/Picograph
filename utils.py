@@ -1,3 +1,5 @@
+# replacements for for certain stdlib functions that aren't implemented in micropython
+
 superscripts = "⁰¹²³⁴⁵⁶⁷⁸⁹"
 normal_digits = "0123456789"
 SUPERSCRIPT = {n: s for n, s in zip(normal_digits, superscripts)}

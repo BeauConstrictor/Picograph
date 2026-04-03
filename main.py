@@ -1,4 +1,5 @@
 import sys
+import json
 from math import pi
 emulated = sys.implementation.name == "cpython"
 
@@ -11,14 +12,10 @@ else:
 from cas import Polynomial, ExprSyntaxError, MissingVariableValueError
 from utils import *
 
-CATALOGUE = {
-    "y = sin(x)":      [pi,  "x-0.1666666666666667xxx+0.008333333333333333xxxxx-0.0001984126984126984xxxxxxx+0.000002755731922398589xxxxxxxxx-0.00000002505210838544172xxxxxxxxxxx-y"],
-    "y = cos(x)":      [pi,  "1-0.5xx+0.041666666666666664xxxx-0.001388888888888889xxxxxx+0.0000248015873015873xxxxxxxx-0.0000002755731922398589xxxxxxxxxx-y"],
-    "y = tan(x)":      [10,  "x+0.3333333333333333xxx+0.13333333333333333xxxxx+0.05396825396825397xxxxxxx+0.021869488536155203xxxxxxxxx+0.008863235529902197xxxxxxxxxxx-y"],
-    "Circle":          [1.2, "xx+yy-1"],
-    "Parabola":        [1.2, "xx-y"],
-    "Rotated ellipse": [1.2, "xx+yy-xy-1"],
-}
+# some of these are taylor expansions so i don't need to add individual support
+# for these functions, just make sure not to zoom out too far :D
+with open("catalogue.json", "r") as f:
+    catalogue = json.load(f)
 
 def graph(polynomial: cas.Polynomial, graph_range: float, display: Display) -> None:
     display_size = 128
@@ -49,6 +46,11 @@ def graph(polynomial: cas.Polynomial, graph_range: float, display: Display) -> N
             current_sign = sign(current_row_vals[j])
             sign_change = False
 
+            # since we have such a low resolution, it is a bad idea to check
+            # if the point at the centre of a pixel is 0. instead, we check
+            # if the sign has changed across pixels, which would mean that 0
+            # is somewhere within one of the pixels. after all, pixels are
+            # squares, not points.
             if j > 0 and current_sign != sign(current_row_vals[j - 1]):
                 sign_change = True
             if j < display_size - 1 and current_sign != sign(current_row_vals[j + 1]):
@@ -149,20 +151,20 @@ class Calculator:
             self.catalogue_selection -= 1
         elif key == "D":
             self.catalogue_selection += 1
-        self.catalogue_selection = min(len(CATALOGUE)-1, max(0, self.catalogue_selection))
+        self.catalogue_selection = min(len(catalogue)-1, max(0, self.catalogue_selection))
 
         self.display.clear()
-        self.display.write(1, 2, "CATALOGUE")
+        self.display.write(1, 2, "catalogue")
         self.display.write(1, 9, "(of premade functions)")
         self.display.write(1, 128-7-1, "Press A for calculator mode")
 
-        for i, (name, expr) in enumerate(CATALOGUE.items()):
+        for i, (name, expr) in enumerate(catalogue.items()):
             self.display.write(1, 23+i*7, "  " + name)
             if i == self.catalogue_selection:
                 self.display.write(1, 23+i*7, ">")
 
         if key == "#":
-            choice = list(CATALOGUE.values())[self.catalogue_selection]
+            choice = list(catalogue.values())[self.catalogue_selection]
             self.zoom = choice[0]
             self.expr = choice[1]
             self.mode = "graphing"
@@ -210,7 +212,7 @@ class Calculator:
         elif key == "D" and expr_ends_in_dash:
             self.catalogue_selection = 0
             self.mode = "catalogue"
-            self.keypress("C")
+            self.keypress("C") # draw the catalogue
 
     def keypress(self, key: str) -> None:
         if   self.mode == "typing":    self.typing_keypress(key)

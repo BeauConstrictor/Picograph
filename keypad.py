@@ -1,3 +1,5 @@
+# adapted version of github.com/DIYables/DIYables_MicroPython_Keypad/blob/main/examples/keypad_4x4.py
+
 from machine import Pin, Timer
 import time
 
