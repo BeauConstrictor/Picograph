@@ -12,9 +12,12 @@ from cas import Polynomial, ExprSyntaxError, MissingVariableValueError
 from utils import *
 
 CATALOGUE = {
-    "sin(x)": [pi,   "x-0.1666666666666667xxx+0.008333333333333333xxxxx-0.0001984126984126984xxxxxxx+0.000002755731922398589xxxxxxxxx-0.00000002505210838544172xxxxxxxxxxx-y"],
-    "cos(x)": [pi, "1-0.5xx+0.041666666666666664xxxx-0.001388888888888889xxxxxx+0.0000248015873015873xxxxxxxx-0.0000002755731922398589xxxxxxxxxx-y"],
-    "tan(x)": [10,    "x+0.3333333333333333xxx+0.13333333333333333xxxxx+0.05396825396825397xxxxxxx+0.021869488536155203xxxxxxxxx+0.008863235529902197xxxxxxxxxxx-y"],
+    "y = sin(x)":      [pi,  "x-0.1666666666666667xxx+0.008333333333333333xxxxx-0.0001984126984126984xxxxxxx+0.000002755731922398589xxxxxxxxx-0.00000002505210838544172xxxxxxxxxxx-y"],
+    "y = cos(x)":      [pi,  "1-0.5xx+0.041666666666666664xxxx-0.001388888888888889xxxxxx+0.0000248015873015873xxxxxxxx-0.0000002755731922398589xxxxxxxxxx-y"],
+    "y = tan(x)":      [10,  "x+0.3333333333333333xxx+0.13333333333333333xxxxx+0.05396825396825397xxxxxxx+0.021869488536155203xxxxxxxxx+0.008863235529902197xxxxxxxxxxx-y"],
+    "Circle":          [1.2, "xx+yy-1"],
+    "Parabola":        [1.2, "xx-y"],
+    "Rotated ellipse": [1.2, "xx+yy-xy-1"],
 }
 
 def graph(polynomial: cas.Polynomial, graph_range: float, display: Display) -> None:
