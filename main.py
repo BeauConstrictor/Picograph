@@ -94,6 +94,8 @@ class Calculator:
         self.display.write(1, 2, str(polynomial) + "_")
 
     def typing_keypress(self, key: str) -> None:
+        expr_ends_in_dash = len(self.expr) > 0 and self.expr[-1] == "-"
+
         if key == "*":
             self.expr = self.expr[:-1]
         elif key.isdigit():
@@ -106,9 +108,7 @@ class Calculator:
             self.expr = self.expr[:-1] + "."
         elif key == "C":
             self.expr += "+"
-        elif key == "D" :
-            self.mode = "catalogue"
-        elif key == "D" and not (len(self.expr) > 0 and self.expr[-1] == "-"):
+        elif key == "D" and not expr_ends_in_dash:
             self.expr += "-"
 
         self.display.clear()
@@ -122,9 +122,10 @@ class Calculator:
             except MissingVariableValueError:
                 self.display.clear()
                 self.display.write(1, 2, "only x and y are allowed!")
-        elif key == "D" and len(self.expr) > 0 and self.expr[-1] == "-":
+        elif key == "D" and expr_ends_in_dash:
             self.catalogue_selection = 0
             self.mode = "catalogue"
+            self.keypress("C") # draw the catalogue
 
     def graphing_keypress(self, key: str) -> None:
         if key == "C":
