@@ -166,7 +166,7 @@ class Calculator:
         for i, (name, expr) in enumerate(catalogue.items()):
             self.display.write(1, 23+i*7, "  " + name)
             if i == self.catalogue_selection:
-                self.display.write(1, 23+i*7, "y>")
+                self.display.write(1, 23+i*7, ">")
 
         if key == "#":
             choice = list(catalogue.values())[self.catalogue_selection]
