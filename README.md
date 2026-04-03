@@ -15,6 +15,12 @@ For exponentiation, repeatedly hit the same variable key (e.g., `AAA` → *x³*)
 
 In viewing mode, use `C` & `D` to zoom in and out.
 
+## Catalogue
+
+The catalogue features approximations of some common functions that cannot be graphed fully. To enter the catalogue, double press the `D` key.
+
+These approximations are implemented as [Taylor series](https://en.wikipedia.org/wiki/Taylor_series). These expressions are quite slow to evaluate on real hardware, so the zoom is automatically set to get you the best view of the function - zooming out too far will reveal the 'limitations' of the approximation.
+
 ## Implementation
 
 To run on hardware:

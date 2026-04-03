@@ -1,4 +1,5 @@
 import sys
+from math import pi
 emulated = sys.implementation.name == "cpython"
 
 if emulated:
@@ -9,6 +10,12 @@ else:
     from machine import Pin
 from cas import Polynomial, ExprSyntaxError, MissingVariableValueError
 from utils import *
+
+CATALOGUE = {
+    "sin(x)": [pi,   "x-0.1666666666666667xxx+0.008333333333333333xxxxx-0.0001984126984126984xxxxxxx+0.000002755731922398589xxxxxxxxx-0.00000002505210838544172xxxxxxxxxxx-y"],
+    "cos(x)": [pi, "1-0.5xx+0.041666666666666664xxxx-0.001388888888888889xxxxxx+0.0000248015873015873xxxxxxxx-0.0000002755731922398589xxxxxxxxxx-y"],
+    "tan(x)": [10,    "x+0.3333333333333333xxx+0.13333333333333333xxxxx+0.05396825396825397xxxxxxx+0.021869488536155203xxxxxxxxx+0.008863235529902197xxxxxxxxxxx-y"],
+}
 
 def graph(polynomial: cas.Polynomial, graph_range: float, display: Display) -> None:
     display_size = 128
@@ -63,6 +70,7 @@ class Calculator:
 
         self.zoom = 1.2
         self.mode = "typing" # or "graphing"
+        self.catalogue_selection = 0
 
         self.pretty_print_expr()
         self.display.refresh()
@@ -94,11 +102,13 @@ class Calculator:
             self.expr += "x"
         elif key == "B":
             self.expr += "y"
-        elif key == "C" and self.expr[-1] == "+":
+        elif key == "C" and len(self.expr) > 0 and self.expr[-1] == "+":
             self.expr = self.expr[:-1] + "."
         elif key == "C":
             self.expr += "+"
-        elif key == "D":
+        elif key == "D" :
+            self.mode = "catalogue"
+        elif key == "D" and not (len(self.expr) > 0 and self.expr[-1] == "-"):
             self.expr += "-"
 
         self.display.clear()
@@ -112,6 +122,9 @@ class Calculator:
             except MissingVariableValueError:
                 self.display.clear()
                 self.display.write(1, 2, "only x and y are allowed!")
+        elif key == "D" and len(self.expr) > 0 and self.expr[-1] == "-":
+            self.catalogue_selection = 0
+            self.mode = "catalogue"
 
     def graphing_keypress(self, key: str) -> None:
         if key == "C":
@@ -127,9 +140,33 @@ class Calculator:
         self.display.clear()
         self.graph()
 
+    def catalogue_keypress(self, key: str) -> None:
+        if key == "C":
+            self.catalogue_selection -= 1
+        elif key == "D":
+            self.catalogue_selection += 1
+        self.catalogue_selection = min(len(CATALOGUE)-1, max(0, self.catalogue_selection))
+
+        self.display.clear()
+        self.display.write(1, 2, "CATALOGUE")
+        self.display.write(1, 9, "(of premade functions)")
+
+        for i, (name, expr) in enumerate(CATALOGUE.items()):
+            self.display.write(1, 23+i*7, "  " + name)
+            if i == self.catalogue_selection:
+                self.display.write(1, 23+i*7, ">")
+
+        if key == "#":
+            choice = list(CATALOGUE.values())[self.catalogue_selection]
+            self.zoom = choice[0]
+            self.expr = choice[1]
+            self.mode = "graphing"
+            self.graph()
+
     def keypress(self, key: str) -> None:
-        if self.mode == "typing": self.typing_keypress(key)
-        else: self.graphing_keypress(key)
+        if   self.mode == "typing":    self.typing_keypress(key)
+        elif self.mode == "graphing":  self.graphing_keypress(key)
+        elif self.mode == "catalogue": self.catalogue_keypress(key)
 
 if __name__ == "__main__":
     if emulated:
