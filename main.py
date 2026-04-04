@@ -216,7 +216,7 @@ class Calculator:
         elif self.mode == "catalogue": self.catalogue_keypress(key)
         elif self.mode == "calculate": self.calculate_keypress(key)
 
-if __name__ == "__main__":
+def main() -> None:
     if emulated:
         Calculator(SoftwareDisplay(160, 128, 10)).run()
     else:
@@ -230,3 +230,6 @@ if __name__ == "__main__":
         keypad.set_debounce_time(400)
     
         Calculator(HardwareDisplay(keypad)).run()
+
+if __name__ == "__main__":
+    main()
