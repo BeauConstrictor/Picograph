@@ -25,9 +25,9 @@ These approximations are implemented as [Taylor series](https://en.wikipedia.org
 
 ## Calculator Mode
 
-You can also enter a simple calculation mode by pressing A when on the catalogue screen. Here, the buttons `A` & `B` serve as multiplcation and division, respectively. Every other button has the same function as in the normal.
+You can also enter a simple calculation mode by pressing A when on the catalogue screen. Here, the buttons `A` & `B` serve as multiplcation and division, respectively. Every other button has the same function as in the normal mode.
 
-To multiplication signs in a row actually performs exponentiation.
+Double asterisks represents the exponentiation operation.
 
 To exit this mode, double press `D`. 
 
