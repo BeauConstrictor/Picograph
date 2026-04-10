@@ -24,6 +24,7 @@ class SoftwareDisplay:
 
         pygame.init()
         self.screen = pygame.display.set_mode((width * scale, height * scale))
+        pygame.display.set_caption("Picograph")
         self.surface = pygame.Surface((width, height))
 
         self.clock = pygame.time.Clock()

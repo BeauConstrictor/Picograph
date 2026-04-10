@@ -2,6 +2,8 @@
 
 A graphing calculator that runs on a Pi Pico. If run locally, the Python code automatically emulates the device using pygame.
 
+<img src="/assets/picograph.png" alt="Screenshot of a rotated ellipse" width="400" />
+
 You input expressions via a hex keypad, which are interpreted as bivariate implicit polynomial equations. Expressions must be entered in fully expanded form.
 
 ## Syntax
