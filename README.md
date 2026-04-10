@@ -31,13 +31,13 @@ To exit this mode, double press `D`.
 
 ## Implementation
 
-To run on hardware:
+### 1. Construction
 
 Use a Pico Omnibus or similar device to duplicate the Pico’s pins.
 
 On one pin set, connect a [Waveshare Pico LCD 1.8"](https://www.waveshare.com/wiki/Pico-LCD-1.8).
 
-On the other pin set, connect a 4×4 matrix keypad as follows (rows → pins 0–3, columns → pins 4–7):
+On the other pin set, connect a 4×4 matrix keypad as follows (rows -> pins 0-3, columns -> pins 4-7):
 
 ```
 1 2 3 A
@@ -45,6 +45,12 @@ On the other pin set, connect a 4×4 matrix keypad as follows (rows → pins 0�
 7 8 9 C
 * 0 # D
 ```
+
+I call this device the 'Picophone' and use it in a few of my other projects. You can also easily connect a switch and battery to make it fully portable.
+
+### 2. Installation
+
+Once you have built the Picophone, use `make flash` (micropython must be installed on the Pico and `mpremote` must be installed on your machine through `pip`) to install the software.
 
 ## License
 
